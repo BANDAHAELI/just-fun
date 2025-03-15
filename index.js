@@ -32,25 +32,26 @@ app.get('/api/ytmp4', async (req, res) => {
 });
 
 app.get('/api/ytmp3', async (req, res) => {
-    try {
-        const { url } = req.query;
-        if (!url) return res.status(400).json({ error: 'Please provide a YouTube URL' });
+         try {
+             const { url } = req.query;
+             if (!url) return res.status(400).json({ error: 'Please provide a YouTube URL' });
 
-        let data = await giftedytmp3(url);
-        console.log('Data received from giftedytmp3:', data); // Log the data
+             let data = await giftedytmp3(url);
+             console.log('Data received from giftedytmp3:', data); // Log the data
 
-        if (!data || data.status !== 200 || !data.result) 
-            return res.status(500).json({ error: 'Failed to fetch audio' });
+             if (!data || data.status !== 200 || !data.result) {
+                 console.error('Failed to fetch audio. Data:', data); // Log the failed data
+                 return res.status(500).json({ error: 'Failed to fetch audio', details: data });
+             }
 
-        res.json({
-            title: data.result.title,
-            thumbnail: data.result.thumbnail,
-            download_url: data.result.download_url
-        });
-    } catch (error) {
-        console.error('Error in /api/ytmp3:', error); // Log the error
-        res.status(500).json({ error: 'Internal Server Error', details: error.message });
-    }
-});
-
+             res.json({
+                 title: data.result.title,
+                 thumbnail: data.result.thumbnail,
+                 download_url: data.result.download_url
+             });
+         } catch (error) {
+             console.error('Error in /api/ytmp3:', error); // Log the error
+             res.status(500).json({ error: 'Internal Server Error', details: error.message });
+         }
+     });
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
