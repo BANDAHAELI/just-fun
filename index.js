@@ -1,10 +1,8 @@
-// Sarkar-MD - YouTube Video Downloader API
 import express from 'express';
 import cors from 'cors';
 import gifted from 'gifted-dls';
 
-const giftedytmp4 = gifted.giftedytmp4;
-const giftedytmp3 = gifted.giftedytmp3;
+const { giftedytmp4, giftedytmp3 } = gifted;
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -17,6 +15,8 @@ app.get('/api/ytmp4', async (req, res) => {
         if (!url) return res.status(400).json({ error: 'Please provide a YouTube URL' });
 
         let data = await giftedytmp4(url);
+        console.log('Data received from giftedytmp4:', data); // Log the data
+
         if (!data || data.status !== 200 || !data.result) 
             return res.status(500).json({ error: 'Failed to fetch video' });
 
@@ -26,6 +26,7 @@ app.get('/api/ytmp4', async (req, res) => {
             download_url: data.result.download_url
         });
     } catch (error) {
+        console.error('Error in /api/ytmp4:', error); // Log the error
         res.status(500).json({ error: 'Internal Server Error', details: error.message });
     }
 });
@@ -36,6 +37,8 @@ app.get('/api/ytmp3', async (req, res) => {
         if (!url) return res.status(400).json({ error: 'Please provide a YouTube URL' });
 
         let data = await giftedytmp3(url);
+        console.log('Data received from giftedytmp3:', data); // Log the data
+
         if (!data || data.status !== 200 || !data.result) 
             return res.status(500).json({ error: 'Failed to fetch audio' });
 
@@ -45,10 +48,9 @@ app.get('/api/ytmp3', async (req, res) => {
             download_url: data.result.download_url
         });
     } catch (error) {
+        console.error('Error in /api/ytmp3:', error); // Log the error
         res.status(500).json({ error: 'Internal Server Error', details: error.message });
     }
 });
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-// POWERED BY BANDAHEALI
