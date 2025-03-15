@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "build": {
+    "env": {
+      "YARN_VERSION": "1.22.x" // Yarn ki specific version specify kar sakte hain
+    }
+  },
+  "scripts": {
+    "build": "yarn install && yarn build", // Yarn se packages install karega aur build script run karega
+    "start": "node index.js" // index.js ko start karega
+  }
+}
